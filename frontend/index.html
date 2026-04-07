@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenGR Weather Analyst</title>
+    <link rel="stylesheet" href="/static/css/app-dist.css">
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Menu Bar -->
+    <header id="menu-bar">
+        <div class="menu-title">OpenGR Weather Analyst</div>
+        <div class="menu-items">
+            <span class="menu-item" id="menu-radar">Radar</span>
+            <span class="menu-item" id="menu-models">Models</span>
+            <span class="menu-item" id="menu-overlays">Overlays</span>
+        </div>
+        <div class="menu-status" id="status-bar">Ready</div>
+    </header>
+
+    <div id="main-layout">
+        <aside id="left-panel">
+            <div class="panel-header">Products</div>
+            <section id="feed-controls" class="feed-controls">
+                <div class="feed-controls-title">Live Feed</div>
+                <label class="feed-field">
+                    <span>Initial scans</span>
+                    <input id="initial-scan-count" type="number" min="1" max="120" step="1">
+                </label>
+                <label class="feed-field">
+                    <span>Max cache</span>
+                    <input id="max-scan-count" type="number" min="1" max="120" step="1">
+                </label>
+                <button id="apply-feed-settings" class="feed-apply-btn" type="button">Apply</button>
+            </section>
+            <div id="product-tree"></div>
+        </aside>
+
+        <main id="map-container">
+            <div id="map"></div>
+            <div id="color-legend" class="hidden"></div>
+        </main>
+
+        <aside id="right-panel">
+            <div class="panel-header">Inspector</div>
+            <div id="inspector-content">
+                <p class="muted">Click on the map to inspect data</p>
+            </div>
+        </aside>
+    </div>
+
+    <footer id="bottom-panel">
+        <div id="timeline-controls">
+            <button id="btn-prev" class="timeline-btn" title="Previous">&#9664;</button>
+            <button id="btn-play" class="timeline-btn" title="Play/Pause">&#9654;</button>
+            <button id="btn-next" class="timeline-btn" title="Next">&#9654;</button>
+            <span id="timeline-label" class="timeline-label">No data loaded</span>
+        </div>
+        <div id="timeline-bar">
+            <div id="timeline-track"></div>
+            <div id="timeline-thumb" class="hidden"></div>
+        </div>
+        <div id="timeline-speed">
+            <label>Speed:</label>
+            <input type="range" id="speed-slider" min="1" max="10" value="5">
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/deck.gl@9.1.0/dist.min.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/panels.js"></script>
+    <script src="/static/js/timeline.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
