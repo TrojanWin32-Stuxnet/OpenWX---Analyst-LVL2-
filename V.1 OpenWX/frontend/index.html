@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenGR Weather Analyst</title>
+    <link rel="stylesheet" href="/static/css/app-dist.css">
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-shell">
+        <header id="menu-bar">
+            <div class="brand-block">
+                <div>
+                    <div class="eyebrow">Radar + Model Workbench</div>
+                    <div class="menu-title">OpenGR Weather Analyst</div>
+                </div>
+                <span class="paper-chip paper-chip-live">Prototype</span>
+            </div>
+
+            <nav class="menu-items" aria-label="Primary views">
+                <button class="menu-item active" id="menu-radar" type="button">Radar</button>
+                <button class="menu-item" id="menu-models" type="button">Models</button>
+                <button class="menu-item" id="menu-overlays" type="button">Overlays</button>
+            </nav>
+
+            <div class="topbar-actions">
+                <div class="desk-note">Field desk theme · Paper palette</div>
+                <div class="menu-status" id="status-bar">Ready</div>
+            </div>
+        </header>
+
+        <div id="main-layout">
+            <aside id="left-panel">
+                <div class="panel-header">Analysis Catalog</div>
+
+                <section class="paper-card intro-card">
+                    <div class="card-title-row">
+                        <div>
+                            <div class="section-kicker">Workspace</div>
+                            <h2>Live Radar Desk</h2>
+                        </div>
+                        <span class="paper-chip">GRLevel2 style</span>
+                    </div>
+                    <p class="card-copy">A cleaner analyst layout with warm paper tones, calmer contrast, and fast access to radar products and archived scans.</p>
+                </section>
+
+                <section id="feed-controls" class="feed-controls paper-card">
+                    <div class="feed-controls-title">Live Feed</div>
+                    <label class="feed-field">
+                        <span>Initial scans</span>
+                        <input id="initial-scan-count" type="number" min="1" max="120" step="1">
+                    </label>
+                    <label class="feed-field">
+                        <span>Max cache</span>
+                        <input id="max-scan-count" type="number" min="1" max="120" step="1">
+                    </label>
+                    <button id="apply-feed-settings" class="feed-apply-btn" type="button">Apply feed settings</button>
+                </section>
+
+                <section class="paper-card utility-card">
+                    <div class="mini-title">Quick Layer Notes</div>
+                    <div class="chip-grid">
+                        <span class="paper-chip">Reflectivity</span>
+                        <span class="paper-chip">Velocity</span>
+                        <span class="paper-chip">Storm motion</span>
+                        <span class="paper-chip">Warnings</span>
+                    </div>
+                </section>
+
+                <section class="tree-card">
+                    <div class="mini-title tree-title">Products & Sites</div>
+                    <div id="product-tree"></div>
+                </section>
+            </aside>
+
+            <main id="map-container">
+                <div class="map-paper-frame">
+                    <div class="map-overlay map-overlay-top-left">
+                        <div class="overlay-label">Current workspace</div>
+                        <h1>Radar Analysis</h1>
+                        <p>Prototype front end for Level II interrogation and model situational awareness.</p>
+                        <div class="overlay-stat-row">
+                            <div class="overlay-stat">
+                                <span class="stat-label">Mode</span>
+                                <strong>Live</strong>
+                            </div>
+                            <div class="overlay-stat">
+                                <span class="stat-label">Focus</span>
+                                <strong>Severe ops</strong>
+                            </div>
+                            <div class="overlay-stat">
+                                <span class="stat-label">Palette</span>
+                                <strong>Paper desk</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-overlay map-overlay-top-right floating-tools">
+                        <div class="mini-title">Map tools</div>
+                        <button type="button" class="tool-pill">County lines</button>
+                        <button type="button" class="tool-pill">Spotter reports</button>
+                        <button type="button" class="tool-pill">Model blend</button>
+                    </div>
+
+                    <div id="map"></div>
+                    <div id="color-legend" class="hidden"></div>
+                </div>
+            </main>
+
+            <aside id="right-panel">
+                <div class="panel-header">Inspector</div>
+
+                <section class="paper-card inspector-summary">
+                    <div class="mini-title">Analyst pad</div>
+                    <ul class="summary-list">
+                        <li>Map click inspection</li>
+                        <li>Scan playback logging</li>
+                        <li>Prepared for model details panel</li>
+                    </ul>
+                </section>
+
+                <div id="inspector-content">
+                    <p class="muted">Click on the map to inspect data</p>
+                </div>
+            </aside>
+        </div>
+
+        <footer id="bottom-panel">
+            <div id="timeline-controls">
+                <button id="btn-prev" class="timeline-btn" title="Previous" type="button">&#9664;</button>
+                <button id="btn-play" class="timeline-btn primary" title="Play/Pause" type="button">&#9654;</button>
+                <button id="btn-next" class="timeline-btn" title="Next" type="button">&#9654;</button>
+                <span id="timeline-label" class="timeline-label">No data loaded</span>
+            </div>
+
+            <div id="timeline-bar" aria-label="Timeline scrubber">
+                <div id="timeline-track"></div>
+                <div id="timeline-thumb" class="hidden"></div>
+            </div>
+
+            <div id="timeline-speed">
+                <label for="speed-slider">Playback</label>
+                <input type="range" id="speed-slider" min="1" max="10" value="5">
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/deck.gl@9.1.0/dist.min.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/panels.js"></script>
+    <script src="/static/js/timeline.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
